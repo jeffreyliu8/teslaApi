@@ -1,13 +1,23 @@
 package com.askjeffreyliu.teslaapi;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+
+import com.orhanobut.logger.AndroidLogAdapter;
+import com.orhanobut.logger.FormatStrategy;
+import com.orhanobut.logger.Logger;
+import com.orhanobut.logger.PrettyFormatStrategy;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -15,6 +25,19 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        FormatStrategy formatStrategy = PrettyFormatStrategy.newBuilder()
+//                .showThreadInfo(false)  // (Optional) Whether to show thread info or not. Default true
+//                .methodCount(0)         // (Optional) How many method line to show. Default 2
+//                .methodOffset(7)        // (Optional) Hides internal method calls up to offset. Default 5
+//                .logStrategy(customLog) // (Optional) Changes the log strategy to print out. Default LogCat
+                .tag(getString(R.string.app_name))   // (Optional) Global tag for every log. Default PRETTY_LOGGER
+                .build();
+
+        Logger.addLogAdapter(new AndroidLogAdapter(formatStrategy));
+
+        setDataListener();
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -48,5 +71,18 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void setDataListener() {
+        ProjectListViewModel viewModel = ViewModelProviders.of(this).get(ProjectListViewModel.class);
+        viewModel.getLiveData().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(@Nullable String products) {
+                if (products != null) {
+                    TextView textView =  findViewById(R.id.text);
+                    textView.setText(products);
+                }
+            }
+        });
     }
 }
