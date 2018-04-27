@@ -69,6 +69,7 @@ public class ProjectEndpoint extends BaseEndpoint {
                     data.setValue(accessTokenResponse.getAccess_token());
                     Logger.d("response isSuccessful ");
                 } else {
+                    data.setValue(null);
                     Logger.e("response unsuccessful ");
                 }
             }

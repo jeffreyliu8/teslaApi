@@ -1,4 +1,15 @@
 <resources>
     <string name="app_name">TeslaApi</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_login">Sign in</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Tesla Email</string>
+    <string name="prompt_password">Tesla Password</string>
+    <string name="action_sign_in">Sign in</string>
+    <string name="error_invalid_email">Email address is invalid</string>
+    <string name="error_invalid_password">Please enter password</string>
+    <string name="error_incorrect_password">Authentication failed</string>
+    <string name="error_field_required">This field is required</string>
+
 </resources>

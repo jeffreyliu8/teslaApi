@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
         Logger.addLogAdapter(new AndroidLogAdapter(formatStrategy));
 
-        setDataListener();
+//        setDataListener();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setDataListener() {
-        ProjectListViewModel viewModel = ViewModelProviders.of(this).get(ProjectListViewModel.class);
+        LoginAccessTokenViewModel viewModel = ViewModelProviders.of(this).get(LoginAccessTokenViewModel.class);
         viewModel.getLiveData().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String products) {
