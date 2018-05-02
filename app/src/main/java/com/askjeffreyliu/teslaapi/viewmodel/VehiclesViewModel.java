@@ -15,7 +15,6 @@ public class VehiclesViewModel extends AndroidViewModel {
 
     private LiveData<List<Vehicle>> mAllVehicles;
 
-
     public VehiclesViewModel(Application application) {
         super(application);
         VehicleRepository mRepository = new VehicleRepository(application);
@@ -25,8 +24,4 @@ public class VehiclesViewModel extends AndroidViewModel {
     public LiveData<List<Vehicle>> getAllVehicles() {
         return mAllVehicles;
     }
-
-//    public void insert(List<RoomVehicle> vehicles) {
-//        mRepository.insert(vehicles);
-//    }
 }

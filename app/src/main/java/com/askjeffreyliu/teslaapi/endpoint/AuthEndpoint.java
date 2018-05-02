@@ -71,10 +71,8 @@ public class AuthEndpoint extends BaseEndpoint {
 
             @Override
             public void onFailure(Call<AccessTokenResponse> call, Throwable t) {
-                // TODO better error handling
-                data.setValue(null);
-
                 Logger.e("onFailure unsuccessful ");
+                data.setValue(null);
             }
         });
 

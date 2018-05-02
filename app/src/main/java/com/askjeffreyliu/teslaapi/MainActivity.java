@@ -23,13 +23,10 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private VehiclesViewModel viewModel;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         setDataListener();
 
@@ -71,9 +68,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void setDataListener() {
         // Get a new or existing ViewModel from the ViewModelProvider.
-        viewModel = ViewModelProviders.of(this).get(VehiclesViewModel.class);
+        VehiclesViewModel viewModel = ViewModelProviders.of(this).get(VehiclesViewModel.class);
 
-        // Add an observer on the LiveData returned by getAlphabetizedWords.
         // The onChanged() method fires when the observed data changes and the activity is
         // in the foreground.
         viewModel.getAllVehicles().observe(this, new Observer<List<Vehicle>>() {
