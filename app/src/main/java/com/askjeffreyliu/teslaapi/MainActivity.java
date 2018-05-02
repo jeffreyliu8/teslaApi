@@ -14,39 +14,31 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.orhanobut.logger.AndroidLogAdapter;
-import com.orhanobut.logger.FormatStrategy;
-import com.orhanobut.logger.Logger;
-import com.orhanobut.logger.PrettyFormatStrategy;
+import com.askjeffreyliu.teslaapi.viewmodel.LoginAccessTokenViewModel;
+import com.askjeffreyliu.teslaapi.viewmodel.MainScreenViewModel;
 
 public class MainActivity extends AppCompatActivity {
+
+    private MainScreenViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        FormatStrategy formatStrategy = PrettyFormatStrategy.newBuilder()
-//                .showThreadInfo(false)  // (Optional) Whether to show thread info or not. Default true
-//                .methodCount(0)         // (Optional) How many method line to show. Default 2
-//                .methodOffset(7)        // (Optional) Hides internal method calls up to offset. Default 5
-//                .logStrategy(customLog) // (Optional) Changes the log strategy to print out. Default LogCat
-                .tag(getString(R.string.app_name))   // (Optional) Global tag for every log. Default PRETTY_LOGGER
-                .build();
 
-        Logger.addLogAdapter(new AndroidLogAdapter(formatStrategy));
+        setDataListener();
 
-//        setDataListener();
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+                viewModel.getVehiclesLiveData();
             }
         });
     }
@@ -74,13 +66,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setDataListener() {
-        LoginAccessTokenViewModel viewModel = ViewModelProviders.of(this).get(LoginAccessTokenViewModel.class);
+        viewModel = ViewModelProviders.of(this).get(MainScreenViewModel.class);
         viewModel.getLiveData().observe(this, new Observer<String>() {
             @Override
-            public void onChanged(@Nullable String products) {
-                if (products != null) {
-                    TextView textView =  findViewById(R.id.text);
-                    textView.setText(products);
+            public void onChanged(@Nullable String vehicle) {
+                if (vehicle != null) {
+                    TextView textView = findViewById(R.id.text);
+                    textView.setText(vehicle);
                 }
             }
         });
