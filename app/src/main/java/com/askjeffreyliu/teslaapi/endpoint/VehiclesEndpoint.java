@@ -4,8 +4,11 @@ package com.askjeffreyliu.teslaapi.endpoint;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 
+import com.askjeffreyliu.teslaapi.model.Vehicle;
 import com.askjeffreyliu.teslaapi.model.VehiclesResponse;
 import com.orhanobut.logger.Logger;
+
+import java.util.List;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -47,16 +50,20 @@ public class VehiclesEndpoint extends BaseEndpoint {
                 .create(VehiclesService.class);
     }
 
-    public LiveData<String> getVehicles() {
-        final MutableLiveData<String> data = new MutableLiveData<>();
+    public LiveData<List<Vehicle>> getVehicles() {
+        final MutableLiveData<List<Vehicle>> data = new MutableLiveData<>();
 
         vehiclesService.getVehicles("bearer " + accessToken).enqueue(new Callback<VehiclesResponse>() {
             @Override
             public void onResponse(Call<VehiclesResponse> call, Response<VehiclesResponse> response) {
                 if (response.isSuccessful()) {
                     VehiclesResponse vehiclesResponse = response.body();
-                    data.setValue("you have " + vehiclesResponse.getCount());
-                    Logger.d("response isSuccessful ");
+                    if (vehiclesResponse != null) {
+                        data.setValue(vehiclesResponse.getResponse());
+                        Logger.d("response isSuccessful " + "you have " + vehiclesResponse.getCount());
+                    } else {
+                        data.setValue(null);
+                    }
                 } else {
                     data.setValue(null);
                     Logger.e("response unsuccessful ");

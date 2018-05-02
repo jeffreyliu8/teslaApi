@@ -1,25 +1,29 @@
 package com.askjeffreyliu.teslaapi;
 
+
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 
-import com.askjeffreyliu.teslaapi.viewmodel.LoginAccessTokenViewModel;
-import com.askjeffreyliu.teslaapi.viewmodel.MainScreenViewModel;
+import com.askjeffreyliu.teslaapi.model.Vehicle;
+import com.askjeffreyliu.teslaapi.viewmodel.VehiclesViewModel;
+import com.orhanobut.logger.Logger;
+
+import java.util.List;
+
 
 public class MainActivity extends AppCompatActivity {
 
-    private MainScreenViewModel viewModel;
+    private VehiclesViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
 //                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                        .setAction("Action", null).show();
-                viewModel.getVehiclesLiveData();
+//                viewModel.getVehiclesLiveData();
             }
         });
     }
@@ -66,13 +70,29 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setDataListener() {
-        viewModel = ViewModelProviders.of(this).get(MainScreenViewModel.class);
-        viewModel.getLiveData().observe(this, new Observer<String>() {
+        // Get a new or existing ViewModel from the ViewModelProvider.
+        viewModel = ViewModelProviders.of(this).get(VehiclesViewModel.class);
+
+        // Add an observer on the LiveData returned by getAlphabetizedWords.
+        // The onChanged() method fires when the observed data changes and the activity is
+        // in the foreground.
+        viewModel.getAllDbVehicles().observe(this, new Observer<List<Vehicle>>() {
             @Override
-            public void onChanged(@Nullable String vehicle) {
-                if (vehicle != null) {
-                    TextView textView = findViewById(R.id.text);
-                    textView.setText(vehicle);
+            public void onChanged(@Nullable final List<Vehicle> vehicles) {
+                // Update the cached copy of the words in the adapter.
+                Logger.d("db size is " + vehicles.size());
+//                for (int i = 0; i < vehicles.size(); i++) {
+//                    Logger.d("db"+vehicles.get(i).getVehicle_id() + " " + vehicles.get(i).getDisplay_name());
+//                }
+            }
+        });
+
+        viewModel.getAllNetworkVehicles().observe(this, new Observer<List<Vehicle>>() {
+            @Override
+            public void onChanged(@Nullable final List<Vehicle> vehicles) {
+                // Update the cached copy of the words in the adapter.
+                for (int i = 0; i < vehicles.size(); i++) {
+                    Logger.d("netowk" + vehicles.get(i).getVehicle_id() + " " + vehicles.get(i).getDisplay_name());
                 }
             }
         });
