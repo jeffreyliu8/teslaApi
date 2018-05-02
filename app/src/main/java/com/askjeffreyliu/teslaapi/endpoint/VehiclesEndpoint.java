@@ -4,7 +4,7 @@ package com.askjeffreyliu.teslaapi.endpoint;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 
-import com.askjeffreyliu.teslaapi.model.AccessTokenResponse;
+import com.askjeffreyliu.teslaapi.model.VehiclesResponse;
 import com.orhanobut.logger.Logger;
 
 import okhttp3.OkHttpClient;
@@ -18,13 +18,12 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 
 
-
 public class VehiclesEndpoint extends BaseEndpoint {
 
     private interface VehiclesService {
 
         @GET("api/1/vehicles")
-        Call<AccessTokenResponse> getVehicles(@Header("Authorization") String authHeader);
+        Call<VehiclesResponse> getVehicles(@Header("Authorization") String authHeader);
     }
 
     private final VehiclesService vehiclesService;
@@ -51,12 +50,12 @@ public class VehiclesEndpoint extends BaseEndpoint {
     public LiveData<String> getVehicles() {
         final MutableLiveData<String> data = new MutableLiveData<>();
 
-        vehiclesService.getVehicles("bearer " + accessToken).enqueue(new Callback<AccessTokenResponse>() {
+        vehiclesService.getVehicles("bearer " + accessToken).enqueue(new Callback<VehiclesResponse>() {
             @Override
-            public void onResponse(Call<AccessTokenResponse> call, Response<AccessTokenResponse> response) {
+            public void onResponse(Call<VehiclesResponse> call, Response<VehiclesResponse> response) {
                 if (response.isSuccessful()) {
-                    AccessTokenResponse accessTokenResponse = response.body();
-                    data.setValue(accessTokenResponse.getAccess_token());
+                    VehiclesResponse vehiclesResponse = response.body();
+                    data.setValue("you have " + vehiclesResponse.getCount());
                     Logger.d("response isSuccessful ");
                 } else {
                     data.setValue(null);
@@ -65,10 +64,8 @@ public class VehiclesEndpoint extends BaseEndpoint {
             }
 
             @Override
-            public void onFailure(Call<AccessTokenResponse> call, Throwable t) {
-                // TODO better error handling
+            public void onFailure(Call<VehiclesResponse> call, Throwable t) {
                 data.setValue(null);
-
                 Logger.e("onFailure unsuccessful ");
             }
         });
