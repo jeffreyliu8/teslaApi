@@ -59,8 +59,8 @@ public class VehiclesEndpoint extends BaseEndpoint {
                 if (response.isSuccessful()) {
                     VehiclesResponse vehiclesResponse = response.body();
                     if (vehiclesResponse != null) {
-                        data.setValue(vehiclesResponse.getResponse());
                         Logger.d("response isSuccessful " + "you have " + vehiclesResponse.getCount());
+                        data.setValue(vehiclesResponse.getResponse());
                     } else {
                         data.setValue(null);
                     }

@@ -13,22 +13,17 @@ import java.util.List;
 
 public class VehiclesViewModel extends AndroidViewModel {
 
-    private LiveData<List<Vehicle>> mAllDbVehicles;
-    private LiveData<List<Vehicle>> mAllNetworkVehicles;
+    private LiveData<List<Vehicle>> mAllVehicles;
+
 
     public VehiclesViewModel(Application application) {
         super(application);
         VehicleRepository mRepository = new VehicleRepository(application);
-        mAllDbVehicles = mRepository.getAllDbVehicles();
-        mAllNetworkVehicles = mRepository.getAllNetworkVehicles();
+        mAllVehicles = mRepository.getAllVehicles();
     }
 
-    public LiveData<List<Vehicle>> getAllDbVehicles() {
-        return mAllDbVehicles;
-    }
-
-    public LiveData<List<Vehicle>> getAllNetworkVehicles() {
-        return mAllNetworkVehicles;
+    public LiveData<List<Vehicle>> getAllVehicles() {
+        return mAllVehicles;
     }
 
 //    public void insert(List<RoomVehicle> vehicles) {

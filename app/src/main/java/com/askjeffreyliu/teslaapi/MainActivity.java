@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         // Add an observer on the LiveData returned by getAlphabetizedWords.
         // The onChanged() method fires when the observed data changes and the activity is
         // in the foreground.
-        viewModel.getAllDbVehicles().observe(this, new Observer<List<Vehicle>>() {
+        viewModel.getAllVehicles().observe(this, new Observer<List<Vehicle>>() {
             @Override
             public void onChanged(@Nullable final List<Vehicle> vehicles) {
                 // Update the cached copy of the words in the adapter.
@@ -84,16 +84,6 @@ public class MainActivity extends AppCompatActivity {
 //                for (int i = 0; i < vehicles.size(); i++) {
 //                    Logger.d("db"+vehicles.get(i).getVehicle_id() + " " + vehicles.get(i).getDisplay_name());
 //                }
-            }
-        });
-
-        viewModel.getAllNetworkVehicles().observe(this, new Observer<List<Vehicle>>() {
-            @Override
-            public void onChanged(@Nullable final List<Vehicle> vehicles) {
-                // Update the cached copy of the words in the adapter.
-                for (int i = 0; i < vehicles.size(); i++) {
-                    Logger.d("netowk" + vehicles.get(i).getVehicle_id() + " " + vehicles.get(i).getDisplay_name());
-                }
             }
         });
     }

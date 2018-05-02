@@ -1,11 +1,12 @@
 package com.askjeffreyliu.teslaapi.repository;
 
 import android.app.Application;
-import android.arch.core.util.Function;
 import android.arch.lifecycle.LiveData;
 
-import android.arch.lifecycle.Transformations;
+import android.arch.lifecycle.MediatorLiveData;
+import android.arch.lifecycle.Observer;
 import android.os.AsyncTask;
+import android.support.annotation.Nullable;
 
 
 import com.askjeffreyliu.teslaapi.Constant;
@@ -17,41 +18,52 @@ import com.askjeffreyliu.teslaapi.room.db.VehicleRoomDatabase;
 import com.orhanobut.logger.Logger;
 import com.pixplicity.easyprefs.library.Prefs;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class VehicleRepository {
     private VehicleDao mVehicleDao;
-    private LiveData<List<Vehicle>> mAllVehicles;
-    private LiveData<List<Vehicle>> vehiclesLiveData = new VehiclesEndpoint(Prefs.getString(Constant.ACCESS_TOKEN, null)).getVehicles();
-    private LiveData<List<Vehicle>> resultLiveData = Transformations.switchMap(vehiclesLiveData, new Function<List<Vehicle>, LiveData<List<Vehicle>>>() {
-        @Override
-        public LiveData<List<Vehicle>> apply(List<Vehicle> input) {
-            if (input != null) {
-                Logger.d("update db");
-                insert(input);
-            }
-            return null;
-        }
-    });
+    private LiveData<List<Vehicle>> vehiclesFromDb;
+    private LiveData<List<Vehicle>> vehiclesFromNetwork = new VehiclesEndpoint(Prefs.getString(Constant.ACCESS_TOKEN, null)).getVehicles();
+    //    private LiveData<List<Vehicle>> resultLiveData = Transformations.switchMap(vehiclesFromNetwork, new Function<List<Vehicle>, LiveData<List<Vehicle>>>() {
+//        @Override
+//        public LiveData<List<Vehicle>> apply(List<Vehicle> input) {
+//            if (input != null) {
+//                Logger.d("update db");
+//                insert(input);
+//            }
+//            return null;
+//        }
+//    });
+    private MediatorLiveData<List<Vehicle>> vehiclesLiveData = new MediatorLiveData<>();
 
     public VehicleRepository(Application application) {
         VehicleRoomDatabase db = VehicleRoomDatabase.getDatabase(application);
         mVehicleDao = db.vehicleDao();
-        mAllVehicles = mVehicleDao.getAllVehicles();
+        vehiclesFromDb = mVehicleDao.getAllVehicles();
+
+        vehiclesLiveData.addSource(vehiclesFromDb, new Observer<List<Vehicle>>() {
+            @Override
+            public void onChanged(@Nullable List<Vehicle> vehicles) {
+                Logger.d("onChanged");
+                vehiclesLiveData.setValue(vehicles);
+            }
+        });
+
+        vehiclesLiveData.addSource(vehiclesFromNetwork, new Observer<List<Vehicle>>() {
+            @Override
+            public void onChanged(@Nullable List<Vehicle> vehicles) {
+                // just update the database, view model will observe db changes
+                if (vehicles != null) {
+                    Logger.d("update db");
+                    insert(vehicles);
+                }
+            }
+        });
     }
 
-    public LiveData<List<Vehicle>> getAllDbVehicles() {
-        return mAllVehicles;
+    public LiveData<List<Vehicle>> getAllVehicles() {
+        return vehiclesLiveData;
     }
-
-    public LiveData<List<Vehicle>> getAllNetworkVehicles() {
-        return resultLiveData;
-    }
-
-
-
-
 
     public void insert(List<Vehicle> vehicles) {
         new insertAsyncTask(mVehicleDao).execute(vehicles);
