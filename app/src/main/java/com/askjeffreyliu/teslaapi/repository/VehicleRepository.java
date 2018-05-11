@@ -1,12 +1,12 @@
 package com.askjeffreyliu.teslaapi.repository;
 
 import android.app.Application;
-import android.arch.lifecycle.LiveData;
+import androidx.lifecycle.LiveData;
 
-import android.arch.lifecycle.MediatorLiveData;
-import android.arch.lifecycle.Observer;
+import androidx.lifecycle.MediatorLiveData;
+import androidx.lifecycle.Observer;
 import android.os.AsyncTask;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 
 import com.askjeffreyliu.teslaapi.Constant;

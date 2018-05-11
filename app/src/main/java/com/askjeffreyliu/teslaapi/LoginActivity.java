@@ -3,17 +3,21 @@ package com.askjeffreyliu.teslaapi;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
+
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Intent;
 
 
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputEditText;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.annotation.Nullable;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+
 import android.text.TextUtils;
 
 import android.view.KeyEvent;
@@ -26,11 +30,6 @@ import android.widget.Toast;
 import com.askjeffreyliu.teslaapi.viewmodel.LoginAccessTokenViewModel;
 import com.pixplicity.easyprefs.library.Prefs;
 
-
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * A login screen that offers login via email/password.
@@ -50,15 +49,15 @@ public class LoginActivity extends AppCompatActivity {
 //    private UserLoginTask mAuthTask = null;
 
     // UI references.
-    @BindView(R.id.email)
-    TextInputEditText mEmailView;
-    @BindView(R.id.password)
-    TextInputEditText mPasswordView;
-    @BindView(R.id.email_sign_in_button)
+//    @BindView(R.id.email)
+    com.google.android.material.textfield.TextInputEditText mEmailView;
+    //    @BindView(R.id.password)
+    com.google.android.material.textfield.TextInputEditText mPasswordView;
+    //    @BindView(R.id.email_sign_in_button)
     Button mEmailSignInButton;
-    @BindView(R.id.login_form)
+    //    @BindView(R.id.login_form)
     View mLoginFormView;
-    @BindView(R.id.login_progress)
+    //    @BindView(R.id.login_progress)
     View mProgressView;
 
     private LoginAccessTokenViewModel viewModel;
@@ -68,7 +67,11 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        ButterKnife.bind(this);
+        mEmailView = findViewById(R.id.email);
+        mPasswordView = findViewById(R.id.password);
+        mEmailSignInButton = findViewById(R.id.email_sign_in_button);
+        mLoginFormView = findViewById(R.id.login_form);
+        mProgressView = findViewById(R.id.login_progress);
 
         String data = Prefs.getString(Constant.ACCESS_TOKEN, null);
         if (!TextUtils.isEmpty(data)) {
@@ -89,11 +92,13 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         viewModel = ViewModelProviders.of(this).get(LoginAccessTokenViewModel.class);
-    }
 
-    @OnClick(R.id.email_sign_in_button)
-    public void onSignInButtonClicked(View view) {
-        attemptLogin();
+        mEmailSignInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                attemptLogin();
+            }
+        });
     }
 
     /**

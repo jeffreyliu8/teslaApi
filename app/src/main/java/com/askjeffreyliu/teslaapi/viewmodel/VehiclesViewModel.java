@@ -2,8 +2,8 @@ package com.askjeffreyliu.teslaapi.viewmodel;
 
 import android.app.Application;
 
-import android.arch.lifecycle.AndroidViewModel;
-import android.arch.lifecycle.LiveData;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 
 import com.askjeffreyliu.teslaapi.model.Vehicle;
 import com.askjeffreyliu.teslaapi.repository.VehicleRepository;
