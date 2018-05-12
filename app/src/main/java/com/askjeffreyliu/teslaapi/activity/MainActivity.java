@@ -1,4 +1,4 @@
-package com.askjeffreyliu.teslaapi;
+package com.askjeffreyliu.teslaapi.activity;
 
 
 import androidx.lifecycle.Observer;
@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.askjeffreyliu.teslaapi.R;
 import com.askjeffreyliu.teslaapi.model.Vehicle;
 import com.askjeffreyliu.teslaapi.viewmodel.VehiclesViewModel;
 import com.orhanobut.logger.Logger;

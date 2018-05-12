@@ -10,11 +10,11 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".LoginActivity">
+    tools:context=".activity.LoginActivity">
 
     <!-- Login progress -->
     <ProgressBar
-        android:id="@+id/login_progress"
+        android:id="@+id/progressBar"
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -22,7 +22,7 @@
         android:visibility="gone" />
 
     <ScrollView
-        android:id="@+id/login_form"
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -32,34 +32,13 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!--<AutoCompleteTextView-->
-            <!--android:id="@+id/email"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:hint="@string/prompt_email"-->
-            <!--android:inputType="textEmailAddress"-->
-            <!--android:maxLines="1"-->
-            <!--android:singleLine="true" />-->
-
-            <!--<EditText-->
-            <!--android:id="@+id/password"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:hint="@string/prompt_password"-->
-            <!--android:imeActionId="6"-->
-            <!--android:imeActionLabel="@string/action_sign_in_short"-->
-            <!--android:imeOptions="actionUnspecified"-->
-            <!--android:inputType="textPassword"-->
-            <!--android:maxLines="1"-->
-            <!--android:singleLine="true" />-->
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/loginWrapper"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/email"
+                    android:id="@+id/emailTextInputEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_email"
@@ -78,7 +57,7 @@
                 app:passwordToggleEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/password"
+                    android:id="@+id/passwordTextInputEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_password"
@@ -92,7 +71,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
-                android:id="@+id/email_sign_in_button"
+                android:id="@+id/signInButton"
                 style="?android:textAppearanceSmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
