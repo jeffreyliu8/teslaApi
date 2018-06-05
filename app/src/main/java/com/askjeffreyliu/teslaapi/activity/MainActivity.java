@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setDataListener() {
         // Get a new or existing ViewModel from the ViewModelProvider.
-        VehiclesViewModel viewModel = ViewModelProviders.of(this).get(VehiclesViewModel.class);
+        final VehiclesViewModel viewModel = ViewModelProviders.of(this).get(VehiclesViewModel.class);
 
         // The onChanged() method fires when the observed data changes and the activity is
         // in the foreground.
@@ -81,6 +81,10 @@ public class MainActivity extends AppCompatActivity {
 //                for (int i = 0; i < vehicles.size(); i++) {
 //                    Logger.d("db"+vehicles.get(i).getVehicle_id() + " " + vehicles.get(i).getDisplay_name());
 //                }
+
+                if (vehicles.size() == 1) {
+                    viewModel.getIsMobileAccessEnabled(vehicles.get(0).getId());
+                }
             }
         });
     }

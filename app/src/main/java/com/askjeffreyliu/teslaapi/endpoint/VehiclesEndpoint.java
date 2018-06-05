@@ -4,6 +4,8 @@ package com.askjeffreyliu.teslaapi.endpoint;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.askjeffreyliu.teslaapi.model.ChargeStateResponse;
+import com.askjeffreyliu.teslaapi.model.MobileAccessEnableResponse;
 import com.askjeffreyliu.teslaapi.model.Vehicle;
 import com.askjeffreyliu.teslaapi.model.VehiclesResponse;
 import com.orhanobut.logger.Logger;
@@ -19,6 +21,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.Path;
 
 
 public class VehiclesEndpoint extends BaseEndpoint {
@@ -27,6 +30,12 @@ public class VehiclesEndpoint extends BaseEndpoint {
 
         @GET("api/1/vehicles")
         Call<VehiclesResponse> getVehicles(@Header("Authorization") String authHeader);
+
+        @GET("api/1/vehicles/{id}/mobile_enabled")
+        Call<MobileAccessEnableResponse> getIsMobileAccessEnabled(@Header("Authorization") String authHeader, @Path("id") long id);
+
+        @GET("api/1/vehicles/{id}/data_request/charge_state")
+        Call<ChargeStateResponse> getChargeState(@Header("Authorization") String authHeader, @Path("id") long id);
     }
 
     private final VehiclesService vehiclesService;
@@ -59,21 +68,51 @@ public class VehiclesEndpoint extends BaseEndpoint {
                 if (response.isSuccessful()) {
                     VehiclesResponse vehiclesResponse = response.body();
                     if (vehiclesResponse != null) {
-                        Logger.d("response isSuccessful " + "you have " + vehiclesResponse.getCount());
+                        Logger.d("response is successful, you have " + vehiclesResponse.getCount());
                         data.setValue(vehiclesResponse.getResponse());
                     } else {
                         data.setValue(null);
                     }
                 } else {
                     data.setValue(null);
-                    Logger.e("response unsuccessful ");
+                    Logger.e("response unsuccessful");
                 }
             }
 
             @Override
             public void onFailure(Call<VehiclesResponse> call, Throwable t) {
                 data.setValue(null);
-                Logger.e("onFailure unsuccessful ");
+                Logger.e("onFailure unsuccessful");
+            }
+        });
+
+        return data;
+    }
+
+    public LiveData<Boolean> getIsMobileAccessEnabled(long id) {
+        final MutableLiveData<Boolean> data = new MutableLiveData<>();
+
+        vehiclesService.getIsMobileAccessEnabled("bearer " + accessToken, id).enqueue(new Callback<MobileAccessEnableResponse>() {
+            @Override
+            public void onResponse(Call<MobileAccessEnableResponse> call, Response<MobileAccessEnableResponse> response) {
+                if (response.isSuccessful()) {
+                    MobileAccessEnableResponse mobileAccessEnableResponse = response.body();
+                    if (mobileAccessEnableResponse != null) {
+                        data.setValue(mobileAccessEnableResponse.getResponse());
+                    } else {
+                        data.setValue(null);
+                    }
+                } else if (response.code() == 401) {
+                    Logger.e(response.message());
+                    data.setValue(null);
+                } else {
+                    data.setValue(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MobileAccessEnableResponse> call, Throwable t) {
+                data.setValue(null);
             }
         });
 
