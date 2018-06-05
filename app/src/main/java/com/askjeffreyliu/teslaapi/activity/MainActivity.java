@@ -3,7 +3,9 @@ package com.askjeffreyliu.teslaapi.activity;
 
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+
 import android.os.Bundle;
+
 import androidx.annotation.Nullable;
 
 
@@ -78,12 +80,9 @@ public class MainActivity extends AppCompatActivity {
             public void onChanged(@Nullable final List<Vehicle> vehicles) {
                 // Update the cached copy of the words in the adapter.
                 Logger.d("db size is " + vehicles.size());
-//                for (int i = 0; i < vehicles.size(); i++) {
-//                    Logger.d("db"+vehicles.get(i).getVehicle_id() + " " + vehicles.get(i).getDisplay_name());
-//                }
-
-                if (vehicles.size() == 1) {
-                    viewModel.getChargerState(vehicles.get(0).getId());
+                for (int i = 0; i < vehicles.size(); i++) {
+                    Vehicle vehicle = vehicles.get(i);
+                    Logger.d("db " + vehicle.getVehicle_id() + " " + vehicle.getDisplay_name() + " " + (vehicle.isMobileAccessEnabled() == null ? "is null" : "not null") + " " + (vehicle.getChargeStateResponseObj() == null ? "is null" : "not null"));
                 }
             }
         });

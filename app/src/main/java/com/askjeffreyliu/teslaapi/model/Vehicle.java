@@ -3,6 +3,7 @@ package com.askjeffreyliu.teslaapi.model;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import androidx.annotation.NonNull;
 
@@ -49,6 +50,16 @@ public class Vehicle {
 
     @ColumnInfo(name = "backseat_token_updated_at")
     private String backseat_token_updated_at;
+
+
+    //=======================
+    @Ignore
+    private Boolean isMobileAccessEnabled = null;
+
+    @Ignore
+    private ChargeStateResponseObj chargeStateResponseObj = null;
+    //=======================
+
 
     public Vehicle(@NonNull long id, @NonNull long vehicle_id, @NonNull String vin) {
         this.id = id;
@@ -161,5 +172,23 @@ public class Vehicle {
 
     public void setBackseat_token_updated_at(String backseat_token_updated_at) {
         this.backseat_token_updated_at = backseat_token_updated_at;
+    }
+
+    //=======================
+
+    public Boolean isMobileAccessEnabled() {
+        return isMobileAccessEnabled;
+    }
+
+    public void setMobileAccessEnabled(boolean mobileAccessEnabled) {
+        isMobileAccessEnabled = mobileAccessEnabled;
+    }
+
+    public ChargeStateResponseObj getChargeStateResponseObj() {
+        return chargeStateResponseObj;
+    }
+
+    public void setChargeStateResponseObj(ChargeStateResponseObj chargeStateResponseObj) {
+        this.chargeStateResponseObj = chargeStateResponseObj;
     }
 }

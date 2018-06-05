@@ -20,4 +20,8 @@ public class ChargeStateResponseObj {
     private String time_to_full_charge;
     private float charge_rate;
     private boolean charge_port_door_open;
+
+    public String getCharging_state() {
+        return charging_state;
+    }
 }

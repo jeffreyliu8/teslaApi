@@ -1,13 +1,15 @@
 package com.askjeffreyliu.teslaapi.repository;
 
 import android.app.Application;
+
 import androidx.lifecycle.LiveData;
 
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.Observer;
-import android.os.AsyncTask;
-import androidx.annotation.Nullable;
 
+import android.os.AsyncTask;
+
+import androidx.annotation.Nullable;
 
 
 import com.askjeffreyliu.teslaapi.endpoint.VehiclesEndpoint;
@@ -35,7 +37,7 @@ public class VehicleRepository {
 //    });
     private MediatorLiveData<List<Vehicle>> vehiclesLiveData = new MediatorLiveData<>();
 
-    public VehicleRepository(Application application, VehiclesEndpoint endpoint) {
+    public VehicleRepository(Application application, final VehiclesEndpoint endpoint) {
 
         VehicleRoomDatabase db = VehicleRoomDatabase.getDatabase(application);
         mVehicleDao = db.vehicleDao();
@@ -46,7 +48,7 @@ public class VehicleRepository {
         vehiclesLiveData.addSource(vehiclesFromDb, new Observer<List<Vehicle>>() {
             @Override
             public void onChanged(@Nullable List<Vehicle> vehicles) {
-                Logger.d("onChanged");
+                Logger.d("onChanged load from db");
                 vehiclesLiveData.setValue(vehicles);
             }
         });
@@ -57,7 +59,12 @@ public class VehicleRepository {
                 // just update the database, view model will observe db changes
                 if (vehicles != null) {
                     Logger.d("update db");
-                    insert(vehicles);
+                    insert(vehicles); // update the whole table
+                    // make end point call for every item in the list? might be redundant if you only focus on 1 car
+                    for (int i = 0; i < vehicles.size(); i++) {
+                        endpoint.getIsMobileAccessEnabled(i, vehiclesLiveData);
+                        endpoint.getChargerState(i, vehiclesLiveData);
+                    }
                 }
             }
         });
@@ -81,7 +88,7 @@ public class VehicleRepository {
 
         @Override
         protected Void doInBackground(final List<Vehicle>... params) {
-            mAsyncTaskDao.deleteAll();
+            mAsyncTaskDao.deleteAll(); // todo: worry about optimizing this later
             for (int i = 0; i < params[0].size(); i++) {
                 mAsyncTaskDao.insert(params[0].get(i));
             }

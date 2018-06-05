@@ -90,63 +90,55 @@ public class VehiclesEndpoint extends BaseEndpoint {
         return data;
     }
 
-    public LiveData<Boolean> getIsMobileAccessEnabled(long id) {
-        final MutableLiveData<Boolean> data = new MutableLiveData<>();
-
-        vehiclesService.getIsMobileAccessEnabled("bearer " + accessToken, id).enqueue(new Callback<MobileAccessEnableResponse>() {
+    public void getIsMobileAccessEnabled(final int index, final MutableLiveData<List<Vehicle>> vehiclesLiveData) {
+        vehiclesService.getIsMobileAccessEnabled("bearer " + accessToken, vehiclesLiveData.getValue().get(index).getId()).enqueue(new Callback<MobileAccessEnableResponse>() {
             @Override
             public void onResponse(Call<MobileAccessEnableResponse> call, Response<MobileAccessEnableResponse> response) {
                 if (response.isSuccessful()) {
                     MobileAccessEnableResponse mobileAccessEnableResponse = response.body();
                     if (mobileAccessEnableResponse != null) {
-                        data.setValue(mobileAccessEnableResponse.getResponse());
+                        vehiclesLiveData.getValue().get(index).setMobileAccessEnabled(mobileAccessEnableResponse.getResponse());
+                        vehiclesLiveData.setValue(vehiclesLiveData.getValue());
                     } else {
-                        data.setValue(null);
+                        Logger.e("getIsMobileAccessEnabled null");
                     }
                 } else if (response.code() == 401) {
                     Logger.e(response.message());
-                    data.setValue(null);
                 } else {
-                    data.setValue(null);
+                    Logger.e("onResponse");
                 }
             }
 
             @Override
             public void onFailure(Call<MobileAccessEnableResponse> call, Throwable t) {
-                data.setValue(null);
+                Logger.e("onFailure");
             }
         });
-
-        return data;
     }
 
-    public LiveData<ChargeStateResponseObj> getChargerState(long id) {
-        final MutableLiveData<ChargeStateResponseObj> data = new MutableLiveData<>();
-
-        vehiclesService.getChargeState("bearer " + accessToken, id).enqueue(new Callback<ChargeStateResponse>() {
+    public void getChargerState(final int index,final MutableLiveData<List<Vehicle>> vehiclesLiveData) {
+        vehiclesService.getChargeState("bearer " + accessToken, vehiclesLiveData.getValue().get(index).getId()).enqueue(new Callback<ChargeStateResponse>() {
             @Override
             public void onResponse(Call<ChargeStateResponse> call, Response<ChargeStateResponse> response) {
                 if (response.isSuccessful()) {
                     ChargeStateResponse chargeStateResponse = response.body();
                     if (chargeStateResponse != null) {
-                        data.setValue(chargeStateResponse.getResponse());
+                        vehiclesLiveData.getValue().get(index).setChargeStateResponseObj(chargeStateResponse.getResponse());
+                        vehiclesLiveData.setValue(vehiclesLiveData.getValue());
                     } else {
-                        data.setValue(null);
+                        Logger.e("getChargeState null");
                     }
                 } else if (response.code() == 401) {
                     Logger.e(response.message());
-                    data.setValue(null);
                 } else {
-                    data.setValue(null);
+                    Logger.e("onResponse");
                 }
             }
 
             @Override
             public void onFailure(Call<ChargeStateResponse> call, Throwable t) {
-                data.setValue(null);
+                Logger.e("onFailure");
             }
         });
-
-        return data;
     }
 }
