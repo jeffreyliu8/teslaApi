@@ -11,27 +11,29 @@ import androidx.annotation.Nullable;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.askjeffreyliu.teslaapi.R;
+import com.askjeffreyliu.teslaapi.adapter.MainScreenRecyclerAdapter;
 import com.askjeffreyliu.teslaapi.model.Vehicle;
 import com.askjeffreyliu.teslaapi.viewmodel.VehiclesViewModel;
-import com.orhanobut.logger.Logger;
 
 import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
 
+    private MainScreenRecyclerAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        setDataListener();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -45,6 +47,15 @@ public class MainActivity extends AppCompatActivity {
 //                viewModel.getVehiclesLiveData();
             }
         });
+
+        RecyclerView mRecyclerView = findViewById(R.id.recycler_view);
+        mRecyclerView.setHasFixedSize(true);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(layoutManager);
+        adapter = new MainScreenRecyclerAdapter();
+        mRecyclerView.setAdapter(adapter);
+
+        setDataListener();
     }
 
     @Override
@@ -78,12 +89,7 @@ public class MainActivity extends AppCompatActivity {
         viewModel.getAllVehicles().observe(this, new Observer<List<Vehicle>>() {
             @Override
             public void onChanged(@Nullable final List<Vehicle> vehicles) {
-                // Update the cached copy of the words in the adapter.
-                Logger.d("db size is " + vehicles.size());
-                for (int i = 0; i < vehicles.size(); i++) {
-                    Vehicle vehicle = vehicles.get(i);
-                    Logger.d("db " + vehicle.getVehicle_id() + " " + vehicle.getDisplay_name() + " " + (vehicle.isMobileAccessEnabled() == null ? "is null" : "not null") + " " + (vehicle.getChargeStateResponseObj() == null ? "is null" : "not null"));
-                }
+                adapter.setList(vehicles);
             }
         });
     }
