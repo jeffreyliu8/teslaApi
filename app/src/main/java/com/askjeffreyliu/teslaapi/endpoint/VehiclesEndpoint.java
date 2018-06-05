@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.askjeffreyliu.teslaapi.model.ChargeStateResponse;
+import com.askjeffreyliu.teslaapi.model.ChargeStateResponseObj;
 import com.askjeffreyliu.teslaapi.model.MobileAccessEnableResponse;
 import com.askjeffreyliu.teslaapi.model.Vehicle;
 import com.askjeffreyliu.teslaapi.model.VehiclesResponse;
@@ -112,6 +113,36 @@ public class VehiclesEndpoint extends BaseEndpoint {
 
             @Override
             public void onFailure(Call<MobileAccessEnableResponse> call, Throwable t) {
+                data.setValue(null);
+            }
+        });
+
+        return data;
+    }
+
+    public LiveData<ChargeStateResponseObj> getChargerState(long id) {
+        final MutableLiveData<ChargeStateResponseObj> data = new MutableLiveData<>();
+
+        vehiclesService.getChargeState("bearer " + accessToken, id).enqueue(new Callback<ChargeStateResponse>() {
+            @Override
+            public void onResponse(Call<ChargeStateResponse> call, Response<ChargeStateResponse> response) {
+                if (response.isSuccessful()) {
+                    ChargeStateResponse chargeStateResponse = response.body();
+                    if (chargeStateResponse != null) {
+                        data.setValue(chargeStateResponse.getResponse());
+                    } else {
+                        data.setValue(null);
+                    }
+                } else if (response.code() == 401) {
+                    Logger.e(response.message());
+                    data.setValue(null);
+                } else {
+                    data.setValue(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ChargeStateResponse> call, Throwable t) {
                 data.setValue(null);
             }
         });

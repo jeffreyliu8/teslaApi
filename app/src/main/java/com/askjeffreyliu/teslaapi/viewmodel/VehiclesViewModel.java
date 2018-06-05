@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData;
 
 import com.askjeffreyliu.teslaapi.Constant;
 import com.askjeffreyliu.teslaapi.endpoint.VehiclesEndpoint;
+import com.askjeffreyliu.teslaapi.model.ChargeStateResponseObj;
 import com.askjeffreyliu.teslaapi.model.Vehicle;
 import com.askjeffreyliu.teslaapi.repository.StateSettingsRepository;
 import com.askjeffreyliu.teslaapi.repository.VehicleRepository;
@@ -35,5 +36,9 @@ public class VehiclesViewModel extends AndroidViewModel {
 
     public LiveData<Boolean> getIsMobileAccessEnabled(long id) {
         return stateSettingsRepository.getIsMobileAccessEnabled(id);
+    }
+
+    public LiveData<ChargeStateResponseObj> getChargerState(long id) {
+        return stateSettingsRepository.getChargerState(id);
     }
 }

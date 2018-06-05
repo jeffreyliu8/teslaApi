@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
 //                }
 
                 if (vehicles.size() == 1) {
-                    viewModel.getIsMobileAccessEnabled(vehicles.get(0).getId());
+                    viewModel.getChargerState(vehicles.get(0).getId());
                 }
             }
         });
