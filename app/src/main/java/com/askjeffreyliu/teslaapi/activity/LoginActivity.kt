@@ -153,6 +153,7 @@ class LoginActivity : AppCompatActivity() {
             if (!TextUtils.isEmpty(accessToken)) {
                 Prefs.putString(Constant.ACCESS_TOKEN, accessToken)
                 startActivity(Intent(this, MainActivity::class.java))
+                finish()
             } else {
                 //                    passwordTextInputEditText.setError(getString(R.string.error_incorrect_password));
                 passwordTextInputEditText.requestFocus()
