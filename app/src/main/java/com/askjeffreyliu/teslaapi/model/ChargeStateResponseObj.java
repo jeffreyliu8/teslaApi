@@ -1,7 +1,7 @@
 package com.askjeffreyliu.teslaapi.model;
 
 
-public class ChargeStateResponseObj {
+public class ChargeStateResponseObj implements Cloneable{
     private String charging_state;
     private boolean charge_to_max_range;
     private long max_range_charge_counter;
@@ -23,5 +23,9 @@ public class ChargeStateResponseObj {
 
     public String getCharging_state() {
         return charging_state;
+    }
+
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }

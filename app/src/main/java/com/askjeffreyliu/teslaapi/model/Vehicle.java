@@ -1,6 +1,8 @@
 package com.askjeffreyliu.teslaapi.model;
 
 
+import com.orhanobut.logger.Logger;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -65,6 +67,22 @@ public class Vehicle {
         this.id = id;
         this.vehicle_id = vehicle_id;
         this.vin = vin;
+    }
+
+    public Vehicle(Vehicle copy) {
+        this.id = copy.id;
+        this.vehicle_id = copy.vehicle_id;
+        this.vin = copy.vin;
+        this.setMobileAccessEnabled(copy.isMobileAccessEnabled);
+        if (copy.getChargeStateResponseObj() == null) {
+            this.setChargeStateResponseObj(null);
+        } else {
+            try {
+                this.setChargeStateResponseObj((ChargeStateResponseObj) (copy.getChargeStateResponseObj().clone()));
+            } catch (CloneNotSupportedException e) {
+                Logger.e(e.toString());
+            }
+        }
     }
 
     @NonNull
@@ -180,7 +198,7 @@ public class Vehicle {
         return isMobileAccessEnabled;
     }
 
-    public void setMobileAccessEnabled(boolean mobileAccessEnabled) {
+    public void setMobileAccessEnabled(Boolean mobileAccessEnabled) {
         isMobileAccessEnabled = mobileAccessEnabled;
     }
 

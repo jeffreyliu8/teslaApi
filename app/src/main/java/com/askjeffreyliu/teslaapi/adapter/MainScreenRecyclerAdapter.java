@@ -7,9 +7,12 @@ import android.widget.TextView;
 
 import com.askjeffreyliu.teslaapi.R;
 import com.askjeffreyliu.teslaapi.model.Vehicle;
+import com.askjeffreyliu.teslaapi.utils.VehicleDiffCallback;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class MainScreenRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -52,8 +55,21 @@ public class MainScreenRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
     }
 
     public void setList(List<Vehicle> list) {
-        mList = list;
-        notifyDataSetChanged();
+        final VehicleDiffCallback diffCallback = new VehicleDiffCallback(mList, list);
+        final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
+
+        if (mList != null) {
+            mList.clear();
+        }
+        if (mList == null) {
+            mList = new ArrayList<>();
+        }
+        if (mList != null && list != null) {
+            for (int i = 0; i < list.size(); i++) {
+                mList.add(new Vehicle(list.get(i)));
+            }
+        }
+        diffResult.dispatchUpdatesTo(this);
     }
 
     @Override
