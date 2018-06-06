@@ -103,7 +103,9 @@ public class VehiclesEndpoint extends BaseEndpoint {
                         Logger.e("getIsMobileAccessEnabled null");
                     }
                 } else if (response.code() == 401) {
-                    Logger.e(response.message());
+                    Logger.e("auth issue? " + response.message());
+                } else if (response.code() == 408) {
+                    Logger.e("time out?" + response.message());
                 } else {
                     Logger.e("onResponse with code " + response.code());
                 }
@@ -129,9 +131,11 @@ public class VehiclesEndpoint extends BaseEndpoint {
                         Logger.e("getChargeState null");
                     }
                 } else if (response.code() == 401) {
-                    Logger.e(response.message());
+                    Logger.e("auth issue? " + response.message());
+                } else if (response.code() == 408) {
+                    Logger.e("time out?" + response.message());
                 } else {
-                    Logger.e("onResponse");
+                    Logger.e("onResponse with code " + response.code());
                 }
             }
 

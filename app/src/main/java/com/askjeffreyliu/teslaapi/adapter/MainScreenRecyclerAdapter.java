@@ -58,15 +58,14 @@ public class MainScreenRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
         final VehicleDiffCallback diffCallback = new VehicleDiffCallback(mList, list);
         final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
 
-        if (mList != null) {
-            mList.clear();
-        }
         if (mList == null) {
             mList = new ArrayList<>();
+        } else {
+            mList.clear();
         }
-        if (mList != null && list != null) {
+        if (list != null) {
             for (int i = 0; i < list.size(); i++) {
-                mList.add(new Vehicle(list.get(i)));
+                mList.add((Vehicle) list.get(i).clone());
             }
         }
         diffResult.dispatchUpdatesTo(this);

@@ -1,7 +1,9 @@
 package com.askjeffreyliu.teslaapi.model;
 
-
 import com.orhanobut.logger.Logger;
+
+import java.util.Arrays;
+import java.util.List;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -10,7 +12,7 @@ import androidx.room.PrimaryKey;
 import androidx.annotation.NonNull;
 
 @Entity(tableName = "vehicles_table")
-public class Vehicle {
+public class Vehicle implements Cloneable {
     @NonNull
     @PrimaryKey(autoGenerate = false)
     private long id;
@@ -69,20 +71,46 @@ public class Vehicle {
         this.vin = vin;
     }
 
-    public Vehicle(Vehicle copy) {
-        this.id = copy.id;
-        this.vehicle_id = copy.vehicle_id;
-        this.vin = copy.vin;
-        this.setMobileAccessEnabled(copy.isMobileAccessEnabled);
-        if (copy.getChargeStateResponseObj() == null) {
-            this.setChargeStateResponseObj(null);
-        } else {
-            try {
-                this.setChargeStateResponseObj((ChargeStateResponseObj) (copy.getChargeStateResponseObj().clone()));
-            } catch (CloneNotSupportedException e) {
-                Logger.e(e.toString());
+    public Object clone() {
+        try {
+            Vehicle result = (Vehicle) super.clone();
+//            result.setMobileAccessEnabled(isMobileAccessEnabled);
+            if (getChargeStateResponseObj() == null) {
+                result.setChargeStateResponseObj(null);
+            } else {
+                result.setChargeStateResponseObj((ChargeStateResponseObj) (getChargeStateResponseObj().clone()));
             }
+            return result;
+        } catch (CloneNotSupportedException e) {
+            Logger.e(e.toString());
         }
+        return null;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return (obj instanceof Vehicle)
+                && ((Vehicle) obj).values().equals(values());
+    }
+
+    private List<?> values() {
+        return Arrays.asList(
+                id,
+                vehicle_id,
+                vin,
+                display_name,
+                color,
+                state,
+                in_service,
+                id_s,
+                remote_start_enabled,
+                calendar_enabled,
+                notifications_enabled,
+                backseat_token,
+                backseat_token_updated_at,
+                isMobileAccessEnabled,
+                chargeStateResponseObj
+        );
     }
 
     @NonNull
