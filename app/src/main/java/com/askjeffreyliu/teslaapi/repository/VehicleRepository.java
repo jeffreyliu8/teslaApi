@@ -60,6 +60,7 @@ public class VehicleRepository {
                 if (vehicles != null) {
                     Logger.d("update db");
                     insert(vehicles); // update the whole table
+                    vehiclesLiveData.setValue(vehicles); // need to make sure the following endpoints not have null live data
                     // make end point call for every item in the list? might be redundant if you only focus on 1 car
                     for (int i = 0; i < vehicles.size(); i++) {
                         endpoint.getIsMobileAccessEnabled(i, vehiclesLiveData);

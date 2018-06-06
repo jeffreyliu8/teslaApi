@@ -105,7 +105,7 @@ public class VehiclesEndpoint extends BaseEndpoint {
                 } else if (response.code() == 401) {
                     Logger.e(response.message());
                 } else {
-                    Logger.e("onResponse");
+                    Logger.e("onResponse with code " + response.code());
                 }
             }
 
@@ -116,7 +116,7 @@ public class VehiclesEndpoint extends BaseEndpoint {
         });
     }
 
-    public void getChargerState(final int index,final MutableLiveData<List<Vehicle>> vehiclesLiveData) {
+    public void getChargerState(final int index, final MutableLiveData<List<Vehicle>> vehiclesLiveData) {
         vehiclesService.getChargeState("bearer " + accessToken, vehiclesLiveData.getValue().get(index).getId()).enqueue(new Callback<ChargeStateResponse>() {
             @Override
             public void onResponse(Call<ChargeStateResponse> call, Response<ChargeStateResponse> response) {

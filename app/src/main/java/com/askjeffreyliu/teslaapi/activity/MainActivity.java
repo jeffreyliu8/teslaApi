@@ -4,6 +4,7 @@ package com.askjeffreyliu.teslaapi.activity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -18,10 +19,12 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.askjeffreyliu.teslaapi.Constant;
 import com.askjeffreyliu.teslaapi.R;
 import com.askjeffreyliu.teslaapi.adapter.MainScreenRecyclerAdapter;
 import com.askjeffreyliu.teslaapi.model.Vehicle;
 import com.askjeffreyliu.teslaapi.viewmodel.VehiclesViewModel;
+import com.pixplicity.easyprefs.library.Prefs;
 
 import java.util.List;
 
@@ -73,7 +76,10 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_logout) {
+            Prefs.putString(Constant.ACCESS_TOKEN, null);
+            finish();
+            startActivity(new Intent(this, LoginActivity.class));
             return true;
         }
 
