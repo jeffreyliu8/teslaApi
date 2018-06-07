@@ -28,6 +28,9 @@ public class Vehicle implements Cloneable {
     @ColumnInfo(name = "display_name")
     private String display_name;
 
+    @ColumnInfo(name = "option_codes")
+    private String option_codes;
+
     @ColumnInfo(name = "color")
     private String color;
 
@@ -99,6 +102,7 @@ public class Vehicle implements Cloneable {
                 vehicle_id,
                 vin,
                 display_name,
+                option_codes,
                 color,
                 state,
                 in_service,
@@ -220,9 +224,17 @@ public class Vehicle implements Cloneable {
         this.backseat_token_updated_at = backseat_token_updated_at;
     }
 
+    public String getOption_codes() {
+        return option_codes;
+    }
+
+    public void setOption_codes(String option_codes) {
+        this.option_codes = option_codes;
+    }
+
     //=======================
 
-    public Boolean isMobileAccessEnabled() {
+    public Boolean getMobileAccessEnabled() {
         return isMobileAccessEnabled;
     }
 

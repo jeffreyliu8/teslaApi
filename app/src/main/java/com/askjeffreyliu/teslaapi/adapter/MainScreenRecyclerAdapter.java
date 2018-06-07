@@ -88,7 +88,7 @@ public class MainScreenRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
             default: {
                 CellViewHolder cellViewHolder = (CellViewHolder) viewHolder;
                 cellViewHolder.textView.setText("" + mList.get(position).getId());
-                cellViewHolder.textView1.setText("" + (mList.get(position).isMobileAccessEnabled() == null ? "null" : mList.get(position).isMobileAccessEnabled()));
+                cellViewHolder.textView1.setText("" + (mList.get(position).getMobileAccessEnabled() == null ? "null" : mList.get(position).getMobileAccessEnabled()));
                 cellViewHolder.textView2.setText("" + (mList.get(position).getChargeStateResponseObj() == null ? "null" : mList.get(position).getChargeStateResponseObj().getCharging_state()));
                 break;
             }
