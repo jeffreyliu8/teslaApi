@@ -48,6 +48,9 @@ public class VehiclesEndpoint extends BaseEndpoint {
 
         @POST("api/1/vehicles/{id}/command/honk_horn")
         Call<SimplePostResponse> honkHorn(@Header("Authorization") String authHeader, @Path("id") long id);
+
+        @POST("api/1/vehicles/{id}/command/trunk_open")
+        Call<SimplePostResponse> openTrunk(@Header("Authorization") String authHeader, @Path("id") long id);
     }
 
     private final VehiclesService vehiclesService;
