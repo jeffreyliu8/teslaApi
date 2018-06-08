@@ -22,6 +22,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
@@ -51,6 +52,7 @@ public class VehiclesEndpoint extends BaseEndpoint {
         Call<SimplePostResponse> honkHorn(@Header("Authorization") String authHeader, @Path("id") long id);
 
         @POST("api/1/vehicles/{id}/command/trunk_open")
+        @FormUrlEncoded
         Call<SimplePostResponse> openTrunk(@Header("Authorization") String authHeader, @Path("id") long id, @Field("which_trunk") String which_trunk);
     }
 
