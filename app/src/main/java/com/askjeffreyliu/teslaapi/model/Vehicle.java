@@ -18,6 +18,10 @@ public class Vehicle implements Cloneable {
     private long id;
 
     @NonNull
+    @ColumnInfo(name = "user_id")
+    private long user_id;
+
+    @NonNull
     @ColumnInfo(name = "vehicle_id")
     private long vehicle_id;
 
@@ -34,6 +38,8 @@ public class Vehicle implements Cloneable {
     @ColumnInfo(name = "color")
     private String color;
 
+    //tokens
+
     @ColumnInfo(name = "state")
     private String state;
 
@@ -43,14 +49,8 @@ public class Vehicle implements Cloneable {
     @ColumnInfo(name = "id_s")
     private String id_s;
 
-    @ColumnInfo(name = "remote_start_enabled")
-    private boolean remote_start_enabled;
-
     @ColumnInfo(name = "calendar_enabled")
     private boolean calendar_enabled;
-
-    @ColumnInfo(name = "notifications_enabled")
-    private boolean notifications_enabled;
 
     @ColumnInfo(name = "backseat_token")
     private String backseat_token;
@@ -99,6 +99,7 @@ public class Vehicle implements Cloneable {
     private List<?> values() {
         return Arrays.asList(
                 id,
+                user_id,
                 vehicle_id,
                 vin,
                 display_name,
@@ -107,9 +108,7 @@ public class Vehicle implements Cloneable {
                 state,
                 in_service,
                 id_s,
-                remote_start_enabled,
                 calendar_enabled,
-                notifications_enabled,
                 backseat_token,
                 backseat_token_updated_at,
                 isMobileAccessEnabled,
@@ -124,6 +123,14 @@ public class Vehicle implements Cloneable {
 
     public void setId(@NonNull long id) {
         this.id = id;
+    }
+
+    public long getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(long user_id) {
+        this.user_id = user_id;
     }
 
     @NonNull
@@ -150,6 +157,14 @@ public class Vehicle implements Cloneable {
 
     public void setDisplay_name(String display_name) {
         this.display_name = display_name;
+    }
+
+    public String getOption_codes() {
+        return option_codes;
+    }
+
+    public void setOption_codes(String option_codes) {
+        this.option_codes = option_codes;
     }
 
     public String getColor() {
@@ -184,28 +199,12 @@ public class Vehicle implements Cloneable {
         this.id_s = id_s;
     }
 
-    public boolean isRemote_start_enabled() {
-        return remote_start_enabled;
-    }
-
-    public void setRemote_start_enabled(boolean remote_start_enabled) {
-        this.remote_start_enabled = remote_start_enabled;
-    }
-
     public boolean isCalendar_enabled() {
         return calendar_enabled;
     }
 
     public void setCalendar_enabled(boolean calendar_enabled) {
         this.calendar_enabled = calendar_enabled;
-    }
-
-    public boolean isNotifications_enabled() {
-        return notifications_enabled;
-    }
-
-    public void setNotifications_enabled(boolean notifications_enabled) {
-        this.notifications_enabled = notifications_enabled;
     }
 
     public String getBackseat_token() {
@@ -222,14 +221,6 @@ public class Vehicle implements Cloneable {
 
     public void setBackseat_token_updated_at(String backseat_token_updated_at) {
         this.backseat_token_updated_at = backseat_token_updated_at;
-    }
-
-    public String getOption_codes() {
-        return option_codes;
-    }
-
-    public void setOption_codes(String option_codes) {
-        this.option_codes = option_codes;
     }
 
     //=======================
