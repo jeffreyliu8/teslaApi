@@ -33,7 +33,7 @@ public class VehiclesViewModel extends AndroidViewModel {
     }
 
     public void flashLight(int index) {
-        mRepository.honkHorn(index);
+        mRepository.flashLight(index);
     }
 
     public void honkHorn(int index) {
@@ -41,6 +41,6 @@ public class VehiclesViewModel extends AndroidViewModel {
     }
 
     public void openTruck(int index) {
-        mRepository.honkHorn(index);
+        mRepository.openTruck(index);
     }
 }
