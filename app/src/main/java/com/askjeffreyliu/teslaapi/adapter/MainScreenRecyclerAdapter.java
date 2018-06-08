@@ -25,7 +25,7 @@ public class MainScreenRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
     public MainScreenRecyclerAdapter() {
     }
 
-    private class CellViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
+    private class CellViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private ImageView imageView;
         private TextView displayName;
         private TextView batteryPercent;
@@ -39,25 +39,25 @@ public class MainScreenRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
             batteryDistance = itemView.findViewById(R.id.batteryDistance);
             imageView = itemView.findViewById(R.id.options);
             honkButton = itemView.findViewById(R.id.honkButton);
-            itemView.setOnClickListener(this);
-            itemView.setOnLongClickListener(this);
+            honkButton.setOnClickListener(this);
+//            itemView.setOnLongClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
             if (mItemClickListener != null) {
-                mItemClickListener.onItemClick(view, getLayoutPosition());
+                mItemClickListener.onItemClick(view, getAdapterPosition());
             }
         }
 
-        @Override
-        public boolean onLongClick(View view) {
-            if (mItemClickListener != null) {
-                mItemClickListener.onItemLongClick(view, getLayoutPosition());
-                return true;
-            }
-            return false;
-        }
+//        @Override
+//        public boolean onLongClick(View view) {
+//            if (mItemClickListener != null) {
+//                mItemClickListener.onItemLongClick(view, getLayoutPosition());
+//                return true;
+//            }
+//            return false;
+//        }
     }
 
     public void setList(List<Vehicle> list) {
@@ -116,7 +116,7 @@ public class MainScreenRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
     }
 
     // for both short and long click
-    public void SetOnItemClickListener(final OnItemClickListener mItemClickListener) {
+    public void setOnItemClickListener(final OnItemClickListener mItemClickListener) {
         this.mItemClickListener = mItemClickListener;
     }
 }

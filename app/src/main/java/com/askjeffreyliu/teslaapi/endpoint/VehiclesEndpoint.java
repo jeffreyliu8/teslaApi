@@ -7,9 +7,9 @@ import androidx.lifecycle.MutableLiveData;
 import com.askjeffreyliu.teslaapi.model.ChargeStateResponse;
 
 import com.askjeffreyliu.teslaapi.model.MobileAccessEnableResponse;
+import com.askjeffreyliu.teslaapi.model.SimplePostResponse;
 import com.askjeffreyliu.teslaapi.model.Vehicle;
 import com.askjeffreyliu.teslaapi.model.VehiclesResponse;
-import com.askjeffreyliu.teslaapi.model.WakeUpResponse;
 import com.orhanobut.logger.Logger;
 
 import java.util.List;
@@ -41,7 +41,13 @@ public class VehiclesEndpoint extends BaseEndpoint {
         Call<ChargeStateResponse> getChargeState(@Header("Authorization") String authHeader, @Path("id") long id);
 
         @POST("api/1/vehicles/{id}/wake_up")
-        Call<WakeUpResponse> wakeUp(@Header("Authorization") String authHeader, @Path("id") long id);
+        Call<SimplePostResponse> wakeUp(@Header("Authorization") String authHeader, @Path("id") long id);
+
+        @POST("api/1/vehicles/{id}/command/flash_lights")
+        Call<SimplePostResponse> flashLights(@Header("Authorization") String authHeader, @Path("id") long id);
+
+        @POST("api/1/vehicles/{id}/command/honk_horn")
+        Call<SimplePostResponse> honkHorn(@Header("Authorization") String authHeader, @Path("id") long id);
     }
 
     private final VehiclesService vehiclesService;
@@ -152,20 +158,19 @@ public class VehiclesEndpoint extends BaseEndpoint {
     }
 
     public void wakeUp(final int index, final MutableLiveData<List<Vehicle>> vehiclesLiveData) {
-        vehiclesService.wakeUp("bearer " + accessToken, vehiclesLiveData.getValue().get(index).getId()).enqueue(new Callback<WakeUpResponse>() {
+        vehiclesService.wakeUp("bearer " + accessToken, vehiclesLiveData.getValue().get(index).getId()).enqueue(new Callback<SimplePostResponse>() {
             @Override
-            public void onResponse(Call<WakeUpResponse> call, Response<WakeUpResponse> response) {
+            public void onResponse(Call<SimplePostResponse> call, Response<SimplePostResponse> response) {
                 if (response.isSuccessful()) {
-                    WakeUpResponse wakeUpResponse = response.body();
-                    if (wakeUpResponse != null) {
-                        Logger.d("wake up cmd success");
-                        if (wakeUpResponse.getResponse().getResult()) {
+                    SimplePostResponse simplePostResponse = response.body();
+                    if (simplePostResponse != null) {
+                        if (simplePostResponse.getResponse().getResult()) {
                             Logger.d("wake up cmd success");
                         } else {
                             Logger.e("wake up false");
                         }
                     } else {
-                        Logger.e("wakeUpResponse null");
+                        Logger.e("simplePostResponse null");
                     }
                 } else if (response.code() == 401) {
                     Logger.e("auth issue? " + response.message());
@@ -177,7 +182,69 @@ public class VehiclesEndpoint extends BaseEndpoint {
             }
 
             @Override
-            public void onFailure(Call<WakeUpResponse> call, Throwable t) {
+            public void onFailure(Call<SimplePostResponse> call, Throwable t) {
+                Logger.e("onFailure");
+            }
+        });
+    }
+
+    public void flashLights(final int index, final MutableLiveData<List<Vehicle>> vehiclesLiveData) {
+        vehiclesService.flashLights("bearer " + accessToken, vehiclesLiveData.getValue().get(index).getId()).enqueue(new Callback<SimplePostResponse>() {
+            @Override
+            public void onResponse(Call<SimplePostResponse> call, Response<SimplePostResponse> response) {
+                if (response.isSuccessful()) {
+                    SimplePostResponse simplePostResponse = response.body();
+                    if (simplePostResponse != null) {
+                        if (simplePostResponse.getResponse().getResult()) {
+                            Logger.d("flashLights cmd success");
+                        } else {
+                            Logger.e("flashLights false");
+                        }
+                    } else {
+                        Logger.e("flashLights null");
+                    }
+                } else if (response.code() == 401) {
+                    Logger.e("auth issue? " + response.message());
+                } else if (response.code() == 408) {
+                    Logger.e("time out?" + response.message());
+                } else {
+                    Logger.e("onResponse with code " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SimplePostResponse> call, Throwable t) {
+                Logger.e("onFailure");
+            }
+        });
+    }
+
+    public void honkHorn(final int index, final MutableLiveData<List<Vehicle>> vehiclesLiveData) {
+        vehiclesService.honkHorn("bearer " + accessToken, vehiclesLiveData.getValue().get(index).getId()).enqueue(new Callback<SimplePostResponse>() {
+            @Override
+            public void onResponse(Call<SimplePostResponse> call, Response<SimplePostResponse> response) {
+                if (response.isSuccessful()) {
+                    SimplePostResponse simplePostResponse = response.body();
+                    if (simplePostResponse != null) {
+                        if (simplePostResponse.getResponse().getResult()) {
+                            Logger.d("honkHorn cmd success");
+                        } else {
+                            Logger.e("honkHorn false");
+                        }
+                    } else {
+                        Logger.e("honkHorn null");
+                    }
+                } else if (response.code() == 401) {
+                    Logger.e("auth issue? " + response.message());
+                } else if (response.code() == 408) {
+                    Logger.e("time out?" + response.message());
+                } else {
+                    Logger.e("onResponse with code " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SimplePostResponse> call, Throwable t) {
                 Logger.e("onFailure");
             }
         });

@@ -1,7 +1,7 @@
 package com.askjeffreyliu.teslaapi.model;
 
 
-public class WakeUpResponseObj {
+public class SimplePostResponseObj {
     private boolean result;
     private String reason;
 

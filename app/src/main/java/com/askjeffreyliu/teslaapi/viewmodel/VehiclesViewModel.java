@@ -19,15 +19,20 @@ import java.util.List;
 public class VehiclesViewModel extends AndroidViewModel {
 
     private LiveData<List<Vehicle>> mAllVehicles;
+    private VehicleRepository mRepository;
 
     public VehiclesViewModel(Application application) {
         super(application);
         VehiclesEndpoint endpoint = new VehiclesEndpoint(Prefs.getString(Constant.ACCESS_TOKEN, null));
-        VehicleRepository mRepository = new VehicleRepository(application, endpoint);
+        mRepository = new VehicleRepository(application, endpoint);
         mAllVehicles = mRepository.getAllVehicles();
     }
 
     public LiveData<List<Vehicle>> getAllVehicles() {
         return mAllVehicles;
+    }
+
+    public void honkHorn(int index) {
+        mRepository.honkHorn(index);
     }
 }

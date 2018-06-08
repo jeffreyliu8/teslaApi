@@ -32,6 +32,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private MainScreenRecyclerAdapter adapter;
+    private VehiclesViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +58,17 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(layoutManager);
         adapter = new MainScreenRecyclerAdapter();
         mRecyclerView.setAdapter(adapter);
+        adapter.setOnItemClickListener(new MainScreenRecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                viewModel.honkHorn(position);
+            }
+
+            @Override
+            public void onItemLongClick(View view, int position) {
+
+            }
+        });
 
         setDataListener();
     }
@@ -88,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setDataListener() {
         // Get a new or existing ViewModel from the ViewModelProvider.
-        final VehiclesViewModel viewModel = ViewModelProviders.of(this).get(VehiclesViewModel.class);
+        viewModel = ViewModelProviders.of(this).get(VehiclesViewModel.class);
 
         // The onChanged() method fires when the observed data changes and the activity is
         // in the foreground.

@@ -24,6 +24,7 @@ import java.util.List;
 
 public class VehicleRepository {
     private VehicleDao mVehicleDao;
+    private VehiclesEndpoint endpoint;
 
     //    private LiveData<List<Vehicle>> resultLiveData = Transformations.switchMap(vehiclesFromNetwork, new Function<List<Vehicle>, LiveData<List<Vehicle>>>() {
 //        @Override
@@ -38,7 +39,7 @@ public class VehicleRepository {
     private MediatorLiveData<List<Vehicle>> vehiclesLiveData = new MediatorLiveData<>();
 
     public VehicleRepository(Application application, final VehiclesEndpoint endpoint) {
-
+        this.endpoint = endpoint;
         VehicleRoomDatabase db = VehicleRoomDatabase.getDatabase(application);
         mVehicleDao = db.vehicleDao();
         LiveData<List<Vehicle>> vehiclesFromDb = mVehicleDao.getAllVehicles();
@@ -74,6 +75,10 @@ public class VehicleRepository {
 
     public LiveData<List<Vehicle>> getAllVehicles() {
         return vehiclesLiveData;
+    }
+
+    public void honkHorn(int index) {
+        endpoint.honkHorn(index, vehiclesLiveData);
     }
 
     public void insert(List<Vehicle> vehicles) {
