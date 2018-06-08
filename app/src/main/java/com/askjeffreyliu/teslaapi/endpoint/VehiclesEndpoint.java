@@ -10,6 +10,7 @@ import com.askjeffreyliu.teslaapi.model.MobileAccessEnableResponse;
 import com.askjeffreyliu.teslaapi.model.SimplePostResponse;
 import com.askjeffreyliu.teslaapi.model.Vehicle;
 import com.askjeffreyliu.teslaapi.model.VehiclesResponse;
+import com.askjeffreyliu.teslaapi.model.WakeUpResponse;
 import com.orhanobut.logger.Logger;
 
 import java.util.List;
@@ -43,7 +44,7 @@ public class VehiclesEndpoint extends BaseEndpoint {
         Call<ChargeStateResponse> getChargeState(@Header("Authorization") String authHeader, @Path("id") long id);
 
         @POST("api/1/vehicles/{id}/wake_up")
-        Call<SimplePostResponse> wakeUp(@Header("Authorization") String authHeader, @Path("id") long id);
+        Call<WakeUpResponse> wakeUp(@Header("Authorization") String authHeader, @Path("id") long id);
 
         @POST("api/1/vehicles/{id}/command/flash_lights")
         Call<SimplePostResponse> flashLights(@Header("Authorization") String authHeader, @Path("id") long id);
@@ -164,17 +165,13 @@ public class VehiclesEndpoint extends BaseEndpoint {
     }
 
     public void wakeUp(final int index, final MutableLiveData<List<Vehicle>> vehiclesLiveData) {
-        vehiclesService.wakeUp("bearer " + accessToken, vehiclesLiveData.getValue().get(index).getId()).enqueue(new Callback<SimplePostResponse>() {
+        vehiclesService.wakeUp("bearer " + accessToken, vehiclesLiveData.getValue().get(index).getId()).enqueue(new Callback<WakeUpResponse>() {
             @Override
-            public void onResponse(Call<SimplePostResponse> call, Response<SimplePostResponse> response) {
+            public void onResponse(Call<WakeUpResponse> call, Response<WakeUpResponse> response) {
                 if (response.isSuccessful()) {
-                    SimplePostResponse simplePostResponse = response.body();
-                    if (simplePostResponse != null) {
-                        if (simplePostResponse.getResponse().getResult()) {
-                            Logger.d("wake up cmd success");
-                        } else {
-                            Logger.e("wake up false");
-                        }
+                    WakeUpResponse wakeUpResponse = response.body();
+                    if (wakeUpResponse != null) {
+                        Logger.d("wake up successful");
                     } else {
                         Logger.e("simplePostResponse null");
                     }
@@ -188,7 +185,7 @@ public class VehiclesEndpoint extends BaseEndpoint {
             }
 
             @Override
-            public void onFailure(Call<SimplePostResponse> call, Throwable t) {
+            public void onFailure(Call<WakeUpResponse> call, Throwable t) {
                 Logger.e("onFailure");
             }
         });
@@ -257,7 +254,7 @@ public class VehiclesEndpoint extends BaseEndpoint {
     }
 
     public void openTrunk(final int index, final MutableLiveData<List<Vehicle>> vehiclesLiveData) {
-        vehiclesService.openTrunk("bearer " + accessToken, vehiclesLiveData.getValue().get(index).getId(),"rear").enqueue(new Callback<SimplePostResponse>() {
+        vehiclesService.openTrunk("bearer " + accessToken, vehiclesLiveData.getValue().get(index).getId(), "rear").enqueue(new Callback<SimplePostResponse>() {
             @Override
             public void onResponse(Call<SimplePostResponse> call, Response<SimplePostResponse> response) {
                 if (response.isSuccessful()) {
