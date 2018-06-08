@@ -5,10 +5,11 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.askjeffreyliu.teslaapi.model.ChargeStateResponse;
-import com.askjeffreyliu.teslaapi.model.ChargeStateResponseObj;
+
 import com.askjeffreyliu.teslaapi.model.MobileAccessEnableResponse;
 import com.askjeffreyliu.teslaapi.model.Vehicle;
 import com.askjeffreyliu.teslaapi.model.VehiclesResponse;
+import com.askjeffreyliu.teslaapi.model.WakeUpResponse;
 import com.orhanobut.logger.Logger;
 
 import java.util.List;
@@ -22,6 +23,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 
@@ -37,6 +39,9 @@ public class VehiclesEndpoint extends BaseEndpoint {
 
         @GET("api/1/vehicles/{id}/data_request/charge_state")
         Call<ChargeStateResponse> getChargeState(@Header("Authorization") String authHeader, @Path("id") long id);
+
+        @POST("api/1/vehicles/{id}/wake_up")
+        Call<WakeUpResponse> wakeUp(@Header("Authorization") String authHeader, @Path("id") long id);
     }
 
     private final VehiclesService vehiclesService;
@@ -141,6 +146,38 @@ public class VehiclesEndpoint extends BaseEndpoint {
 
             @Override
             public void onFailure(Call<ChargeStateResponse> call, Throwable t) {
+                Logger.e("onFailure");
+            }
+        });
+    }
+
+    public void wakeUp(final int index, final MutableLiveData<List<Vehicle>> vehiclesLiveData) {
+        vehiclesService.wakeUp("bearer " + accessToken, vehiclesLiveData.getValue().get(index).getId()).enqueue(new Callback<WakeUpResponse>() {
+            @Override
+            public void onResponse(Call<WakeUpResponse> call, Response<WakeUpResponse> response) {
+                if (response.isSuccessful()) {
+                    WakeUpResponse wakeUpResponse = response.body();
+                    if (wakeUpResponse != null) {
+                        Logger.d("wake up cmd success");
+                        if (wakeUpResponse.getResponse().getResult()) {
+                            Logger.d("wake up cmd success");
+                        } else {
+                            Logger.e("wake up false");
+                        }
+                    } else {
+                        Logger.e("wakeUpResponse null");
+                    }
+                } else if (response.code() == 401) {
+                    Logger.e("auth issue? " + response.message());
+                } else if (response.code() == 408) {
+                    Logger.e("time out?" + response.message());
+                } else {
+                    Logger.e("onResponse with code " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<WakeUpResponse> call, Throwable t) {
                 Logger.e("onFailure");
             }
         });
