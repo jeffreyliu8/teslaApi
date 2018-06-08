@@ -25,12 +25,15 @@ public class MainScreenRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
     public MainScreenRecyclerAdapter() {
     }
 
-    private class CellViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private ImageView imageView;
+    private class CellViewHolder extends RecyclerView.ViewHolder {
+
         private TextView displayName;
         private TextView batteryPercent;
         private TextView batteryDistance;
+        private ImageView imageView;
+        private Button flashButton;
         private Button honkButton;
+        private Button openTrunkButton;
 
         public CellViewHolder(View itemView) {
             super(itemView);
@@ -38,17 +41,44 @@ public class MainScreenRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
             batteryPercent = itemView.findViewById(R.id.batteryPercent);
             batteryDistance = itemView.findViewById(R.id.batteryDistance);
             imageView = itemView.findViewById(R.id.options);
+            flashButton = itemView.findViewById(R.id.flashButton);
             honkButton = itemView.findViewById(R.id.honkButton);
-            honkButton.setOnClickListener(this);
+            openTrunkButton = itemView.findViewById(R.id.openTrunkButton);
+//            itemView.setOnClickListener(this);
 //            itemView.setOnLongClickListener(this);
+
+            flashButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (mItemClickListener != null) {
+                        mItemClickListener.onFlashClicked(view, getAdapterPosition());
+                    }
+                }
+            });
+
+            honkButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (mItemClickListener != null) {
+                        mItemClickListener.onHonkClicked(view, getAdapterPosition());
+                    }
+                }
+            });
+
+            openTrunkButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (mItemClickListener != null) {
+                        mItemClickListener.onOpenTrunkClicked(view, getAdapterPosition());
+                    }
+                }
+            });
         }
 
-        @Override
-        public void onClick(View view) {
-            if (mItemClickListener != null) {
-                mItemClickListener.onItemClick(view, getAdapterPosition());
-            }
-        }
+//        @Override
+//        public void onClick(View view) {
+//
+//        }
 
 //        @Override
 //        public boolean onLongClick(View view) {
@@ -95,8 +125,8 @@ public class MainScreenRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
                 CellViewHolder cellViewHolder = (CellViewHolder) viewHolder;
                 Picasso.get().load("https://www.tesla.com/configurator/compositor/?model=mx&view=STUD_3QTR&size=1920&bkba_opt=1&file_type=jpg&options=" + mList.get(position).getOption_codes()).into(cellViewHolder.imageView);
                 cellViewHolder.displayName.setText("" + mList.get(position).getDisplay_name());
-                cellViewHolder.batteryPercent.setText("" + (mList.get(position).getMobileAccessEnabled() == null ? "null" : mList.get(position).getMobileAccessEnabled()));
-                cellViewHolder.batteryDistance.setText("" + (mList.get(position).getChargeStateResponseObj() == null ? "null" : mList.get(position).getChargeStateResponseObj().getCharging_state()));
+                cellViewHolder.batteryPercent.setText("" + (mList.get(position).getChargeStateResponseObj() == null ? "null" : mList.get(position).getChargeStateResponseObj().getBattery_level()));
+                cellViewHolder.batteryDistance.setText("" + (mList.get(position).getChargeStateResponseObj() == null ? "null" : mList.get(position).getChargeStateResponseObj().getBattery_range()));
                 break;
             }
         }
@@ -110,9 +140,11 @@ public class MainScreenRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
     }
 
     public interface OnItemClickListener {
-        void onItemClick(View view, int position);
+        void onFlashClicked(View view, int position);
 
-        void onItemLongClick(View view, int position);
+        void onHonkClicked(View view, int position);
+
+        void onOpenTrunkClicked(View view, int position);
     }
 
     // for both short and long click

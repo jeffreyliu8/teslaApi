@@ -21,6 +21,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
@@ -50,7 +51,7 @@ public class VehiclesEndpoint extends BaseEndpoint {
         Call<SimplePostResponse> honkHorn(@Header("Authorization") String authHeader, @Path("id") long id);
 
         @POST("api/1/vehicles/{id}/command/trunk_open")
-        Call<SimplePostResponse> openTrunk(@Header("Authorization") String authHeader, @Path("id") long id);
+        Call<SimplePostResponse> openTrunk(@Header("Authorization") String authHeader, @Path("id") long id, @Field("which_trunk") String which_trunk);
     }
 
     private final VehiclesService vehiclesService;
@@ -236,6 +237,37 @@ public class VehiclesEndpoint extends BaseEndpoint {
                         }
                     } else {
                         Logger.e("honkHorn null");
+                    }
+                } else if (response.code() == 401) {
+                    Logger.e("auth issue? " + response.message());
+                } else if (response.code() == 408) {
+                    Logger.e("time out?" + response.message());
+                } else {
+                    Logger.e("onResponse with code " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SimplePostResponse> call, Throwable t) {
+                Logger.e("onFailure");
+            }
+        });
+    }
+
+    public void openTrunk(final int index, final MutableLiveData<List<Vehicle>> vehiclesLiveData) {
+        vehiclesService.openTrunk("bearer " + accessToken, vehiclesLiveData.getValue().get(index).getId(),"rear").enqueue(new Callback<SimplePostResponse>() {
+            @Override
+            public void onResponse(Call<SimplePostResponse> call, Response<SimplePostResponse> response) {
+                if (response.isSuccessful()) {
+                    SimplePostResponse simplePostResponse = response.body();
+                    if (simplePostResponse != null) {
+                        if (simplePostResponse.getResponse().getResult()) {
+                            Logger.d("openTrunk cmd success");
+                        } else {
+                            Logger.e("openTrunk false");
+                        }
+                    } else {
+                        Logger.e("openTrunk null");
                     }
                 } else if (response.code() == 401) {
                     Logger.e("auth issue? " + response.message());

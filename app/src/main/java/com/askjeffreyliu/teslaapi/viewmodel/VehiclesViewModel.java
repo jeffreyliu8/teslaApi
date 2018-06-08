@@ -32,7 +32,15 @@ public class VehiclesViewModel extends AndroidViewModel {
         return mAllVehicles;
     }
 
+    public void flashLight(int index) {
+        mRepository.honkHorn(index);
+    }
+
     public void honkHorn(int index) {
+        mRepository.honkHorn(index);
+    }
+
+    public void openTruck(int index) {
         mRepository.honkHorn(index);
     }
 }

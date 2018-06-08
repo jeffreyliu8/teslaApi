@@ -59,13 +59,18 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener(new MainScreenRecyclerAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(View view, int position) {
+            public void onFlashClicked(View view, int position) {
+                viewModel.flashLight(position);
+            }
+
+            @Override
+            public void onHonkClicked(View view, int position) {
                 viewModel.honkHorn(position);
             }
 
             @Override
-            public void onItemLongClick(View view, int position) {
-
+            public void onOpenTrunkClicked(View view, int position) {
+                viewModel.openTruck(position);
             }
         });
 

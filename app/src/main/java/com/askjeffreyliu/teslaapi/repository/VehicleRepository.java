@@ -77,8 +77,16 @@ public class VehicleRepository {
         return vehiclesLiveData;
     }
 
+    public void flashLight(int index) {
+        endpoint.flashLights(index, vehiclesLiveData);
+    }
+
     public void honkHorn(int index) {
         endpoint.honkHorn(index, vehiclesLiveData);
+    }
+
+    public void openTruck(int index) {
+        endpoint.openTrunk(index, vehiclesLiveData);
     }
 
     public void insert(List<Vehicle> vehicles) {
