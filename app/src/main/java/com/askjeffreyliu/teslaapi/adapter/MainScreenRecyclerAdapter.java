@@ -3,11 +3,14 @@ package com.askjeffreyliu.teslaapi.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.askjeffreyliu.teslaapi.R;
 import com.askjeffreyliu.teslaapi.model.Vehicle;
 import com.askjeffreyliu.teslaapi.utils.VehicleDiffCallback;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,16 +26,19 @@ public class MainScreenRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
     }
 
     private class CellViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
-        private TextView textView;
-        private TextView textView1;
-        private TextView textView2;
+        private ImageView imageView;
+        private TextView displayName;
+        private TextView batteryPercent;
+        private TextView batteryDistance;
+        private Button honkButton;
 
         public CellViewHolder(View itemView) {
             super(itemView);
-            textView = itemView.findViewById(R.id.id);
-            textView1 = itemView.findViewById(R.id.access);
-            textView2 = itemView.findViewById(R.id.charge);
-
+            displayName = itemView.findViewById(R.id.displayName);
+            batteryPercent = itemView.findViewById(R.id.batteryPercent);
+            batteryDistance = itemView.findViewById(R.id.batteryDistance);
+            imageView = itemView.findViewById(R.id.options);
+            honkButton = itemView.findViewById(R.id.honkButton);
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
         }
@@ -87,9 +93,10 @@ public class MainScreenRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
         switch (viewHolder.getItemViewType()) {
             default: {
                 CellViewHolder cellViewHolder = (CellViewHolder) viewHolder;
-                cellViewHolder.textView.setText("" + mList.get(position).getId());
-                cellViewHolder.textView1.setText("" + (mList.get(position).getMobileAccessEnabled() == null ? "null" : mList.get(position).getMobileAccessEnabled()));
-                cellViewHolder.textView2.setText("" + (mList.get(position).getChargeStateResponseObj() == null ? "null" : mList.get(position).getChargeStateResponseObj().getCharging_state()));
+                Picasso.get().load("https://www.tesla.com/configurator/compositor/?model=mx&view=STUD_3QTR&size=1920&bkba_opt=1&file_type=jpg&options=" + mList.get(position).getOption_codes()).into(cellViewHolder.imageView);
+                cellViewHolder.displayName.setText("" + mList.get(position).getDisplay_name());
+                cellViewHolder.batteryPercent.setText("" + (mList.get(position).getMobileAccessEnabled() == null ? "null" : mList.get(position).getMobileAccessEnabled()));
+                cellViewHolder.batteryDistance.setText("" + (mList.get(position).getChargeStateResponseObj() == null ? "null" : mList.get(position).getChargeStateResponseObj().getCharging_state()));
                 break;
             }
         }
