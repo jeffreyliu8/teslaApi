@@ -13,7 +13,7 @@ A simple app to show how you can also connect to your Model S/X (3 not tested)
 
 
 
-![Output sample](https://github.com/jeffreyliu8/Zebra-View/blob/master/screenshot.png)
+![Output sample](https://github.com/jeffreyliu8/teslaApi/blob/master/screenshot.png)
 
 Developed By
 -------
